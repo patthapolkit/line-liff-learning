@@ -19,7 +19,11 @@ export const LIFFProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initializeLiff = async () => {
       try {
-        await liff.init({ liffId: process.env.LIFF_ID as string });
+        if (!process.env.LIFF_ID) {
+          throw new Error("LIFF_ID is not defined");
+        }
+
+        await liff.init({ liffId: process.env.LIFF_ID! as string });
         setLiffObject(liff);
         if (liff.isLoggedIn()) {
           const profile = await liff.getProfile();
