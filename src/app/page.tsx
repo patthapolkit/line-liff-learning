@@ -1,9 +1,10 @@
 "use client";
 
-import { useLIFF } from "@/contexts/line-liff-context";
+import { useLiff } from "@/contexts/line-liff-context";
+import Image from "next/image";
 
 const Home = () => {
-  const { liff, profile, error }: any = useLIFF();
+  const { liff, profile, error }: any = useLiff();
 
   if (error) return <div>Error: {error.message}</div>;
   if (!liff) return <div>Loading...</div>;
@@ -14,7 +15,7 @@ const Home = () => {
       {profile && (
         <div>
           <p>Name: {profile.displayName}</p>
-          <img src={profile.pictureUrl} alt="Profile" />
+          <Image src={profile.pictureUrl} alt="Profile" />
         </div>
       )}
     </div>

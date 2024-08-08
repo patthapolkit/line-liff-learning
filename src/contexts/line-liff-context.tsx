@@ -9,9 +9,9 @@ const LIFFContext = createContext<{
   error: Error | null;
 } | null>(null);
 
-export const useLIFF = () => useContext(LIFFContext);
+export const useLiff = () => useContext(LIFFContext);
 
-export const LIFFProvider = ({ children }: { children: React.ReactNode }) => {
+export const LiffProvider = ({ children }: { children: React.ReactNode }) => {
   const [liffObject, setLiffObject] = useState<Liff | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -19,11 +19,7 @@ export const LIFFProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const initializeLiff = async () => {
       try {
-        if (!process.env.LIFF_ID) {
-          throw new Error("LIFF_ID is not defined");
-        }
-
-        await liff.init({ liffId: process.env.LIFF_ID! as string });
+        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! as string });
         setLiffObject(liff);
         if (liff.isLoggedIn()) {
           const profile = await liff.getProfile();
