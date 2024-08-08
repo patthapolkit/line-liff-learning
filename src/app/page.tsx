@@ -15,7 +15,13 @@ const Home = () => {
       {profile && (
         <div>
           <p>Name: {profile.displayName}</p>
-          <Image src={profile.pictureUrl} alt="Profile" />
+          <p>User ID: {profile.userId}</p>
+          <Image
+            src={profile.pictureUrl}
+            alt="Profile Picture"
+            width={200}
+            height={200}
+          />
         </div>
       )}
     </div>
