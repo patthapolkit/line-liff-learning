@@ -24,10 +24,8 @@ export default function Page(): JSX.Element {
   };
 
   useEffect(() => {
-    if (!error && liff) {
-      console.log("liff", liff);
-      getAccessToken();
-    }
+    console.log("liff", liff);
+    getAccessToken();
   }, []);
 
   return (
