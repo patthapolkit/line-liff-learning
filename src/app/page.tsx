@@ -5,7 +5,7 @@ import { useLiff } from "@/contexts/line-liff-context";
 
 export default function Page(): JSX.Element {
   const { liff, error } = useLiff();
-  const { accessToken, setAccessToken } = useState();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const getAccessToken = async (): Promise<void> => {
     if (liff?.isLoggedIn) {
