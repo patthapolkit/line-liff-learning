@@ -8,7 +8,7 @@ export default function Page(): JSX.Element {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const getAccessToken = async (): Promise<void> => {
-    if (liff?.isLoggedIn) {
+    if (liff?.isLoggedIn()) {
       const accessToken = liff.getAccessToken();
       if (accessToken) {
         // await fetch("/api/line", {
@@ -25,6 +25,7 @@ export default function Page(): JSX.Element {
 
   useEffect(() => {
     if (!error && liff) {
+      console.log("liff", liff);
       getAccessToken();
     }
   }, []);
