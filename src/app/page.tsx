@@ -1,31 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLiff } from "@/contexts/line-liff-context";
-import Image from "next/image";
 
-const Home = () => {
-  const { liff, profile, error }: any = useLiff();
+export default function Page(): JSX.Element {
+  const { liff, error } = useLiff();
+  const { accessToken, setAccessToken } = useState();
 
-  if (error) return <div>Error: {error.message}</div>;
-  if (!liff) return <div>Loading...</div>;
+  const getAccessToken = async (): Promise<void> => {
+    if (liff?.isLoggedIn) {
+      const accessToken = liff.getAccessToken();
+      if (accessToken) {
+        // await fetch("/api/line", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({ accessToken }),
+        // });
+        setAccessToken(accessToken);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!error && liff) {
+      getAccessToken();
+    }
+  }, []);
 
   return (
-    <div>
-      <h1>Welcome to LINE LIFF</h1>
-      {profile && (
-        <div>
-          <p>Name: {profile.displayName}</p>
-          <p>User ID: {profile.userId}</p>
-          <Image
-            src={profile.pictureUrl}
-            alt="Profile Picture"
-            width={200}
-            height={200}
-          />
-        </div>
-      )}
-    </div>
+    <main>
+      <div>
+        <p className="bg-neutral-500 text-3xl">esc website</p>
+        <button>test</button>
+        {accessToken && <p>{accessToken}</p>}
+      </div>
+    </main>
   );
-};
-
-export default Home;
+}

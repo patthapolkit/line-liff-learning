@@ -1,42 +1,48 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import liff, { Liff } from "@line/liff";
+import type { Liff } from "@line/liff";
+import { liff } from "@line/liff";
 
-const LIFFContext = createContext<{
+interface LiffContextType {
   liff: Liff | null;
-  profile: any;
-  error: Error | null;
-} | null>(null);
+  error: unknown;
+}
 
-export const useLiff = () => useContext(LIFFContext);
+export const LiffContext = createContext<LiffContextType | null>(null);
 
-export const LiffProvider = ({ children }: { children: React.ReactNode }) => {
+export function useLiff(): LiffContextType {
+  const context = useContext(LiffContext);
+
+  if (!context) {
+    throw new Error("useLiff must be used within a LiffProvider");
+  }
+
+  return context;
+}
+
+export function LiffProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   const [liffObject, setLiffObject] = useState<Liff | null>(null);
-  const [profile, setProfile] = useState<any>(null);
-  const [error, setError] = useState<Error | null>(null);
+  const [liffError, setLiffError] = useState<unknown>(null);
 
   useEffect(() => {
-    const initializeLiff = async () => {
-      try {
-        await liff.init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! as string });
+    liff
+      .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! })
+      .then(() => {
         setLiffObject(liff);
-        if (liff.isLoggedIn()) {
-          const profile = await liff.getProfile();
-          setProfile(profile);
-        } else {
-          liff.login();
-        }
-      } catch (err) {
-        if (err instanceof Error) setError(err);
-      }
-    };
-    initializeLiff();
+      })
+      .catch((error) => {
+        setLiffError(error);
+      });
   }, []);
 
   return (
-    <LIFFContext.Provider value={{ liff: liffObject, profile, error }}>
+    <LiffContext.Provider value={{ liff: liffObject, error: liffError }}>
       {children}
-    </LIFFContext.Provider>
+    </LiffContext.Provider>
   );
-};
+}
