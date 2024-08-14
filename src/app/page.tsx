@@ -24,11 +24,10 @@ export default function Page(): JSX.Element {
   };
 
   useEffect(() => {
-    if (liff) {
-      console.log("liff", liff);
+    if (!error && liff) {
       getAccessToken();
     }
-  }, [liff]);
+  }, [liff, error]);
 
   return (
     <main>
