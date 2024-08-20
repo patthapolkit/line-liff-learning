@@ -1,6 +1,6 @@
 export async function POST(req: Request): Promise<Response> {
     const body = await req.json();
-
+    console.log(body);
     const message = body.data.rows[0].name + ' has submitted a new form!';
 
     const res = await fetch(process.env.DISCORD_WEBHOOK_URL!, {
