@@ -1,5 +1,6 @@
 const env = {
   DISCORD_BOT_FORM_TEST_URL: process.env["WEB_APP_DISCORD_BOT_FORM_TEST_URL"],
+  DISCORD_BOT_FORM_PROD_URL: process.env["WEB_APP_DISCORD_BOT_FORM_PROD_URL"],
 };
 
 export async function POST(req: Request): Promise<Response> {
