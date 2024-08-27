@@ -1,6 +1,6 @@
 "use server";
 
-export async function getLineUserID(accessToken: string): Promise<Response> {
+export async function getLineUserId(accessToken: string): Promise<Response> {
   try {
     const verifyResponse = await fetch(
       `https://api.line.me/oauth2/v2.1/verify?access_token=${accessToken}`

@@ -1,25 +1,32 @@
-import { useLiff } from "@/contexts/line-liff-context";
-import { getLineUserID } from "@/server/actions/line";
+"use client";
 
-export default async function Page(): Promise<JSX.Element> {
-  const { liff, error: _error } = useLiff();
-  let userId;
+import { useLiff } from "@/contexts/line-liff-context";
+import { getLineUserId } from "@/server/actions/line";
+import { useEffect, useState } from "react";
+
+export default function Page(): JSX.Element {
+  const { liff, error } = useLiff();
+  const [userId, setUserId] = useState<string>("");
 
   const getAccessToken = async (): Promise<void> => {
     if (liff?.isLoggedIn) {
       const accessToken = liff.getAccessToken();
       if (accessToken) {
-        const res = await getLineUserID(accessToken);
+        const res = await getLineUserId(accessToken);
         if (res.ok) {
-          const { userId: _userId } = await res.json();
-          userId = _userId;
+          const { userId: _userId } = (await res.json()) as { userId: string };
+          setUserId(_userId);
           console.log(userId);
         }
       }
     }
   };
 
-  await getAccessToken();
+  useEffect(() => {
+    if (!error && liff) {
+      getAccessToken();
+    }
+  }, [liff, error]);
 
   return (
     <main>
