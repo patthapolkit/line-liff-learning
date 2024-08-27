@@ -19,6 +19,8 @@ export async function POST(req: Request): Promise<Response> {
     .toUpperCase()
     .replace(/-/g, "_")}_URL` as keyof typeof env;
 
+  console.log("discordChannelEnv", discordChannelEnv);
+
   if (!env[discordChannelEnv]) {
     return new Response(JSON.stringify({ error: "Invalid discord channel" }), {
       status: 400,
