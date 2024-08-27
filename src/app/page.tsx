@@ -3,7 +3,6 @@
 import { useLiff } from "@/contexts/line-liff-context";
 import { getLineUserId } from "@/server/actions/line";
 import { useEffect, useState } from "react";
-import type { Liff } from "@line/liff";
 
 export default function Page(): JSX.Element {
   const { liff, error } = useLiff();
@@ -14,13 +13,9 @@ export default function Page(): JSX.Element {
       const handleLiff = async (): Promise<void> => {
         if (liff.isLoggedIn()) {
           const accessToken = liff.getAccessToken();
-          setUserId("loading...");
           if (accessToken) {
             const res = await getLineUserId(accessToken);
-            if (res.ok) {
-              const { userId } = await res.json();
-              setUserId(userId);
-            }
+            setUserId(res);
           }
         } else {
           setUserId("not logged in");
