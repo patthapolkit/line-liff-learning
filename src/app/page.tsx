@@ -9,28 +9,24 @@ export default function Page(): JSX.Element {
   const { liff, error } = useLiff();
   const [userId, setUserId] = useState<string>("");
 
-  const handleLiff = async (liff: Liff): Promise<void> => {
-    if (liff.isLoggedIn()) {
-      console.log("isLoggedIn");
-      const accessToken = liff.getAccessToken();
-      if (accessToken) {
-        const res = await getLineUserId(accessToken);
-        if (res.ok) {
-          const { userId: _userId } = (await res.json()) as { userId: string };
-          setUserId(_userId);
-          console.log(userId);
-        }
-      }
-    } else {
-      // liff?.login();
-      console.log("login");
-      setUserId("not logged in");
-    }
-  };
-
   useEffect(() => {
     if (!error && liff) {
-      handleLiff(liff);
+      const handleLiff = async (): Promise<void> => {
+        if (liff.isLoggedIn()) {
+          const accessToken = liff.getAccessToken();
+          setUserId("loading...");
+          if (accessToken) {
+            const res = await getLineUserId(accessToken);
+            if (res.ok) {
+              const { userId } = await res.json();
+              setUserId(userId);
+            }
+          }
+        } else {
+          setUserId("not logged in");
+        }
+      };
+      handleLiff();
     }
   }, [liff, error]);
 
