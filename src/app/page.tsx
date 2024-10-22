@@ -14,8 +14,10 @@ export default function Page(): JSX.Element {
         if (liff.isLoggedIn()) {
           const accessToken = liff.getAccessToken();
           if (accessToken) {
-            const res = await getLineUserId(accessToken);
-            setUserId(res);
+            const { data, message, error } = await getLineUserId(accessToken);
+            if (!error && data) {
+              setUserId(data);
+            }
           }
         } else {
           setUserId("not logged in");
